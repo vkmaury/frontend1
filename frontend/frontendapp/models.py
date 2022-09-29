@@ -6,3 +6,6 @@ class front_end(models.Model):
     tag_line = models.CharField(max_length=122)
     note = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.note_title
+
