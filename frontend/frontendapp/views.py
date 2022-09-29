@@ -6,10 +6,13 @@ from django.core.paginator import Paginator
 # Create your views here.
 def home(request):
     data = front_end.objects.all()
+    paginator = Paginator(data, 6)
+    page_number = request.GET.get('page')
+    data = paginator.get_page(page_number)
     context = {
-        'data':data,
+        'data': data,
     }
-    return render(request,'home.html',context)
+    return render(request, 'home.html', context)
 
 
 def save(request):
@@ -20,16 +23,16 @@ def save(request):
         front_end(note_title=nm, tag_line=tg, note=nt).save()
         return redirect('home')
 
-def update(request,id):
+
+def update(request, id):
     if request.method == 'POST':
         nm = request.POST['nm']
         tg = request.POST['tg']
         nt = request.POST['nt']
-        front_end(id=id,note_title=nm, tag_line=tg, note=nt).save()
+        front_end(id=id, note_title=nm, tag_line=tg, note=nt).save()
         return redirect('home')
 
-
-    return redirect(request,'home.html')
+    return redirect(request, 'home.html')
 
 
 def edit(request):
@@ -37,9 +40,10 @@ def edit(request):
     context = {
         'data': data,
     }
-    return redirect(request,'home.html',context)
+    return redirect(request, 'home.html', context)
 
-def delete(request,id):
+
+def delete(request, id):
     data = front_end.objects.filter(id=id)
     data.delete()
     context = {
